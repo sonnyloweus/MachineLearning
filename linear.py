@@ -6,6 +6,9 @@ import numpy as np
 import sklearn
 from sklearn import linear_model
 from sklearn.utils import shuffle
+import matplotlib.pyplot as pyplot
+import pickle
+from matplotlib import style
 
 # reads from the database file and denotes a separator -> ";"
 # usually, the separator is a comma (csv stands for "comma separated values")
@@ -60,6 +63,17 @@ accuracy = linear.score(dataSet_test, target_test)
 
 print(accuracy)
 
+# Saving a model
+# You can use this to either save the highest accuracy model or save a model if the testing
+# takes a long time.
+# creates a file using pickle and dumps your model, in this case it is under the variable linear
+with open("studentmodel.pickle", "wb") as f:
+    pickle.dump(linear, f)
+
+# reads the pickle file
+pickle_in = open("studentmodel.pickle", "rb")
+linear = pickle.load(pickle_in)
+
 # constants for the actual linear line
 # linear line is in a multi-dimension space
 # number of dimensions is equal to the number of columns/variables you give it
@@ -74,7 +88,6 @@ predictions = linear.predict(dataSet_test)
 #for x in range(len(predictions)):
     # print: predicted outcome, data used to determine prediction, and correct answer
     # print(predictions[x], dataSet_test[x], target_test[x])
-
 
 
 
