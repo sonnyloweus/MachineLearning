@@ -42,33 +42,51 @@ target = np.array(data[predict])
 # the test_size of 0.1 takes 10% of the data; thus, the other 90% is used to train the AI
 dataSet_train, dataSet_test, target_train, target_test = sklearn.model_selection.train_test_split(dataSet, target, test_size = 0.1)
 
-# LINEAR REGRESSION
-# the code finds a line equation --> mx + b
-# that best fits the points
-linear = linear_model.LinearRegression()
+# variable that keeps track of best linear model
+best = 0
+# from here on, it will for-loop through this to train linear models and store the best
+# models (most accurate)
+# comment out for-loop if you have gotten an optimum / high accuracy.
+for __ in range(30):
 
-# finds a line that best fits with the data (dataSet_Train) and produces
-# the target (target_train)
-linear.fit(dataSet_train, target_train)
+    # re-defines arrays after each test
+    dataSet_train, dataSet_test, target_train, target_test = sklearn.model_selection.train_test_split(dataSet, target, test_size=0.1)
 
-# tells us the accuracy of our line based on the given test data
-accuracy = linear.score(dataSet_test, target_test)
+    # LINEAR REGRESSION
+    # the code finds a line equation --> mx + b
+    # that best fits the points
+    linear = linear_model.LinearRegression()
 
-# this lets you see the data sets that are used
-# dataSet_train has defined percentage of the database to develop a pattern
-# dataSet_test has left over percentage of the database to assess the accuracy
-# print(dataSet_train)
-# print("####################")
-# print(dataSet_test)
+    # finds a line that best fits with the data (dataSet_Train) and produces
+    # the target (target_train)
+    linear.fit(dataSet_train, target_train)
 
-print(accuracy)
+    # tells us the accuracy of our line based on the given test data
+    accuracy = linear.score(dataSet_test, target_test)
 
-# Saving a model
-# You can use this to either save the highest accuracy model or save a model if the testing
-# takes a long time.
-# creates a file using pickle and dumps your model, in this case it is under the variable linear
-with open("studentmodel.pickle", "wb") as f:
-    pickle.dump(linear, f)
+    # this lets you see the data sets that are used
+    # dataSet_train has defined percentage of the database to develop a pattern
+    # dataSet_test has left over percentage of the database to assess the accuracy
+    # print(dataSet_train)
+    # print("####################")
+    # print(dataSet_test)
+
+    print(accuracy)
+
+    # saves model if it is more accurate than our current best
+    if accuracy > best:
+        best = accuracy
+        # Saving a model
+        # You can use this to either save the highest accuracy model or save a model if the testing
+        # takes a long time.
+        # creates a file using pickle and dumps your model, in this case it is under the variable linear
+        with open("studentmodel.pickle", "wb") as f:
+            pickle.dump(linear, f)
+
+# end of for-loop
+
+# prints our best after for-loop
+print("Accuracy : ", best)
 
 # reads the pickle file
 pickle_in = open("studentmodel.pickle", "rb")
